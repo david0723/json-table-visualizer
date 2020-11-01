@@ -2,15 +2,27 @@ import React, { useState, useContext } from 'react';
 import { removeRow, getColumns } from './util';
 import { Rows as RowsType, Row as RowType } from './types';
 import styled from 'styled-components';
+import { COLOR_PALEETTE } from '../../constants';
 
 const TableWrapper = styled.div`
   padding: 1rem;
 
   table {
+    font-size: small;
+
+    border: solid black 1px;
     border-spacing: 0;
-    border: 1px solid black;
+
+    th {
+      background-color: ${COLOR_PALEETTE.ORANGE};
+      color: ${COLOR_PALEETTE.WHITE};
+    }
 
     tr {
+      background: ${COLOR_PALEETTE.WHITE};
+      :nth-child(odd) {
+        background-color: ${COLOR_PALEETTE.GRAY};
+      }
       :last-child {
         td {
           border-bottom: 0;
@@ -30,6 +42,16 @@ const TableWrapper = styled.div`
       }
     }
   }
+`;
+
+const Button = styled.button`
+  border: solid black 1px;
+  background-color: ${COLOR_PALEETTE.ORANGE};
+  color: ${COLOR_PALEETTE.WHITE};
+  margin-top: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 5px 10px;
 `;
 
 const ActionCell = styled.td`
@@ -127,18 +149,16 @@ const Table: React.FC<RowsProps> = ({ rows: propRows }) => {
   };
 
   return (
-    <>
-      <button onClick={() => setRows(propRows)}>Reset</button>
+    <TableWrapper>
       {rows.length === 0 ? (
         <p>No data</p>
       ) : (
-        <TableWrapper>
-          <TableContext.Provider value={{ deleteRow }}>
-            <Rows rows={rows} />
-          </TableContext.Provider>
-        </TableWrapper>
+        <TableContext.Provider value={{ deleteRow }}>
+          <Rows rows={rows} />
+        </TableContext.Provider>
       )}
-    </>
+      <Button onClick={() => setRows(propRows)}>Reset</Button>
+    </TableWrapper>
   );
 };
 
